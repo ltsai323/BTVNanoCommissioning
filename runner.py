@@ -1,3 +1,9 @@
+#!/usr/bin/env python3
+import logging
+import sys
+
+log = logging.getLogger(__name__)
+
 import os
 import sys
 import json
@@ -357,7 +363,15 @@ def debug_parser(parser):
     return parser
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
+    import os
+    loglevel = os.environ.get('LOG_LEVEL', 'INFO') # DEBUG, INFO, WARNING
+    DEBUG_MODE = True if loglevel == 'DEBUG' else False
+    logLEVEL = getattr(logging, loglevel)
+    logging.basicConfig(stream=sys.stdout,level=logLEVEL,
+            format=f'%(levelname)-7s%(filename)s#%(lineno)s %(funcName)s() >>> %(message)s',
+            datefmt='%H:%M:%S')
+
     parser = argparse.ArgumentParser(
         description="Run analysis on baconbits files using processor coffea files"
     )
